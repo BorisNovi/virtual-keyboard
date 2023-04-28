@@ -16,7 +16,7 @@ function drawHTML() {
         d0Key: ['0', '&rpar;', '0', '&rpar;', '0', '&rpar;', '0', '&rpar;'],
         minusKey: ['-', '_', '-', '_', '-', '_', '-', '_'],
         equalKey: ['=', '+', '=', '+', '=', '+', '=', '+'],
-        backKey: ['Backspace', 'Backspace', 'Backspace', 'Backspace', 'Стереть', 'Стереть', 'Стереть', 'Стереть'],
+        backKey: ['Back', 'Back', 'Back', 'Backs', '&larr;', '&larr;', '&larr;', '&larr;'],
     };
     const tabObj = {
         tabKey: ['Tab', 'Tab', 'Tab', 'Tab', 'Таб', 'Таб', 'Таб', 'Таб'],
@@ -35,7 +35,7 @@ function drawHTML() {
         bslashKey: ['\\', '|', '\\', '|', '\\', '/', '\\', '/']
     };
     const capsObj = {
-        capsKey: ['Caps lock', 'Caps lock', 'Caps lock', 'Caps lock', 'Кричать', 'Кричать', 'Кричать', 'Кричать'],
+        capsKey: ['Caps', 'Caps', 'Caps', 'Caps', 'Кричать', 'Кричать', 'Кричать', 'Кричать'],
         aKey: ['a', 'A', 'A', 'a', 'ф', 'Ф', 'Ф', 'ф'],
         sKey: ['s', 'S', 'S', 's', 'ы', 'Ы', 'Ы', 'ы'],
         dKey: ['d', 'D', 'D', 'd', 'в', 'В', 'В', 'в'],
@@ -62,23 +62,24 @@ function drawHTML() {
         dotKey: ['.', '&gt', '.', '&gt', 'ю', 'Ю', 'Ю', 'ю'],
         slashKey: ['/', '?', '/', '?', '.', ',', '.', ','],
         tarrKey: ['&#9650;', '&#9650;', '&#9650;', '&#9650;', '&#9650;', '&#9650;', '&#9650;', '&#9650;'],
-        lshiftKey: ['Shift', 'Shift', 'Shift', 'Shift', 'Большие', 'Большие', 'Большие', 'Большие']
+        rshiftKey: ['Shift', 'Shift', 'Shift', 'Shift', 'Большие', 'Большие', 'Большие', 'Большие']
     };
     const ctrlObj = {
         ctrlKey: ['Ctrl', 'Ctrl', 'Ctrl', 'Ctrl', 'Ктрл', 'Ктрл', 'Ктрл', 'Ктрл'],
         winKey: ['Win', 'Win', 'Win', 'Окна', 'Окна', 'Окна', 'Окна'],
         altKey: ['Alt', 'Alt', 'Alt', 'Alt', 'Альт', 'Альт', 'Альт', 'Альт'],
         spaceKey: ['Space', 'Space', 'Space', 'Space', 'Пробел', 'Пробел', 'Пробел', 'Пробел'],
-        laltKey: ['Alt', 'Alt', 'Alt', 'Alt', 'Альт', 'Альт', 'Альт', 'Альт'],
-        lctrlKey: ['Ctrl', 'Ctrl', 'Ctrl', 'Ctrl', 'Ктрл', 'Ктрл', 'Ктрл', 'Ктрл'],
+        raltKey: ['Alt', 'Alt', 'Alt', 'Alt', 'Альт', 'Альт', 'Альт', 'Альт'],
+        rctrlKey: ['Ctrl', 'Ctrl', 'Ctrl', 'Ctrl', 'Ктрл', 'Ктрл', 'Ктрл', 'Ктрл'],
         larrKey: ['&#9668;', '&#9668;', '&#9668;', '&#9668;', '&#9668;', '&#9668;', '&#9668;', '&#9668;',],
         barrKey: ['&#9660;', '&#9660;', '&#9660;', '&#9660;', '&#9660;', '&#9660;', '&#9660;', '&#9660;'],
-        rarrKey: ['&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;']
+        rarrKey: ['&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;'],
+        fnKey: ['&#9679;', '&#9679;', '&#9679;', '&#9679;', '&#9679;', '&#9679;', '&#9679;', '&#9679;']
     };
 
     document.body.innerHTML = `<div class="container">
     <h1 class="header">RS Virtual Keyboard</h1>
-    <textarea class="keyboard-textarea" id="textarea" cols="50" rows="10"></textarea>
+    <textarea class="keyboard-textarea" id="textarea" cols="50" rows="8"></textarea>
     <div class="keyboard-keys">
         <div class="keyboard-row row numkeys"></div>
         <div class="keyboard-row row tabkeys"></div>
@@ -182,5 +183,4 @@ function drawHTML() {
     console.log(numObj[Object.keys(numObj)[0]][0]); // вывести определенный символ
     console.log(Object.keys(numObj)[0]); // вывести ключ по индексу
 }
-
 drawHTML()
