@@ -89,14 +89,14 @@ function drawHTML() {
     </div>
 `; // Body
 
-    const numInsert = document.querySelector('.numkeys');
-    const tabInsert = document.querySelector('.tabkeys');
-    const capsInsert = document.querySelector('.capskeys');
-    const shiftInsert = document.querySelector('.shiftkeys');
-    const ctrlInsert = document.querySelector('.ctrlkeys');
+    const NUM_INSERT = document.querySelector('.numkeys');
+    const TAB_INSERT = document.querySelector('.tabkeys');
+    const CAPS_INSERT = document.querySelector('.capskeys');
+    const SHIFT_INSERT = document.querySelector('.shiftkeys');
+    const CTRL_INSERT = document.querySelector('.ctrlkeys');
 
     for (let i = 0; i < Object.keys(numObj).length; i++) {
-        numInsert.innerHTML += `<div class="keyboard-key ${Object.keys(numObj)[i]}">
+        NUM_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(numObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${numObj[Object.keys(numObj)[i]][4]}</span>
     <span class="caseUp hidden">${numObj[Object.keys(numObj)[i]][5]}</span>
@@ -113,7 +113,7 @@ function drawHTML() {
     } // Num row
 
     for (let i = 0; i < Object.keys(tabObj).length; i++) {
-        tabInsert.innerHTML += `<div class="keyboard-key ${Object.keys(tabObj)[i]}">
+        TAB_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(tabObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${tabObj[Object.keys(tabObj)[i]][4]}</span>
     <span class="caseUp hidden">${tabObj[Object.keys(tabObj)[i]][5]}</span>
@@ -130,7 +130,7 @@ function drawHTML() {
     } // Tab row
 
     for (let i = 0; i < Object.keys(capsObj).length; i++) {
-        capsInsert.innerHTML += `<div class="keyboard-key ${Object.keys(capsObj)[i]}">
+        CAPS_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(capsObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${capsObj[Object.keys(capsObj)[i]][4]}</span>
     <span class="caseUp hidden">${capsObj[Object.keys(capsObj)[i]][5]}</span>
@@ -147,7 +147,7 @@ function drawHTML() {
     } // Caps row
 
     for (let i = 0; i < Object.keys(shiftObj).length; i++) {
-        shiftInsert.innerHTML += `<div class="keyboard-key ${Object.keys(shiftObj)[i]}">
+        SHIFT_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(shiftObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${shiftObj[Object.keys(shiftObj)[i]][4]}</span>
     <span class="caseUp hidden">${shiftObj[Object.keys(shiftObj)[i]][5]}</span>
@@ -164,7 +164,7 @@ function drawHTML() {
     } // Shift row
 
     for (let i = 0; i < Object.keys(ctrlObj).length; i++) {
-        ctrlInsert.innerHTML += `<div class="keyboard-key ${Object.keys(ctrlObj)[i]}">
+        CTRL_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(ctrlObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${ctrlObj[Object.keys(ctrlObj)[i]][4]}</span>
     <span class="caseUp hidden">${ctrlObj[Object.keys(ctrlObj)[i]][5]}</span>
@@ -179,8 +179,38 @@ function drawHTML() {
 </span>
 </div>`
     } // Ctrl row
-
-    console.log(numObj[Object.keys(numObj)[0]][0]); // вывести определенный символ
-    console.log(Object.keys(numObj)[0]); // вывести ключ по индексу
 }
-drawHTML()
+drawHTML();
+
+const KEYBOARD = document.querySelectorAll('.keyboard-key');
+const CASE_DOWN = document.querySelectorAll('.caseDown');
+const CASE_UP = document.querySelectorAll('.caseUp');
+const CAPS = document.querySelectorAll('.caps');
+const SHIFT_CAPS = document.querySelectorAll('.shiftCaps');
+
+function toggleCaps() {
+    let isCapsLocked = false;
+
+    KEYBOARD[28].addEventListener('click', () => {
+        if (!isCapsLocked) {
+            KEYBOARD[28].classList.add('capsLocked');
+            CASE_DOWN.forEach(element => {
+                element.classList.add('hidden');
+            });
+            CAPS.forEach(element => {
+                element.classList.remove('hidden');
+            });
+            isCapsLocked = true;
+        } else {
+            KEYBOARD[28].classList.remove('capsLocked');
+            CASE_DOWN.forEach(element => {
+                element.classList.remove('hidden');
+            });
+            CAPS.forEach(element => {
+                element.classList.add('hidden');
+            });
+            isCapsLocked = false;
+        }
+    });
+}
+toggleCaps();
