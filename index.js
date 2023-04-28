@@ -191,7 +191,7 @@ const SHIFT_CAPS = document.querySelectorAll('.shiftCaps');
 function toggleCaps() {
     let isCapsLocked = false;
 
-    KEYBOARD[28].addEventListener('click', () => {
+    function capsLogic() {
         if (!isCapsLocked) {
             KEYBOARD[28].classList.add('capsLocked');
             CASE_DOWN.forEach(element => {
@@ -211,6 +211,15 @@ function toggleCaps() {
             });
             isCapsLocked = false;
         }
+    }
+    KEYBOARD[28].addEventListener('click', () => {
+        capsLogic()
     });
+
+    document.addEventListener('keydown', () => {
+        capsLogic()
+    });
+
 }
 toggleCaps();
+
