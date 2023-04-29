@@ -216,10 +216,14 @@ function toggleCaps() {
         capsLogic()
     });
 
-    document.addEventListener('keydown', () => {
-        capsLogic()
+    document.addEventListener('keydown', (event) => {
+        if (event.code == "CapsLock") {
+            capsLogic();
+        }
     });
 
 }
 toggleCaps();
+
+console.log(KEYBOARD);
 
