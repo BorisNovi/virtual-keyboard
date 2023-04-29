@@ -16,7 +16,7 @@ function drawHTML() {
         d0Key: ['0', '&rpar;', '0', '&rpar;', '0', '&rpar;', '0', '&rpar;'],
         minusKey: ['-', '_', '-', '_', '-', '_', '-', '_'],
         equalKey: ['=', '+', '=', '+', '=', '+', '=', '+'],
-        backKey: ['Back', 'Back', 'Back', 'Backs', '&larr;', '&larr;', '&larr;', '&larr;'],
+        backKey: ['Back', 'Back', 'Back', 'Back', '&larr;', '&larr;', '&larr;', '&larr;'],
     };
     const tabObj = {
         tabKey: ['Tab', 'Tab', 'Tab', 'Tab', 'Таб', 'Таб', 'Таб', 'Таб'],
@@ -66,7 +66,7 @@ function drawHTML() {
     };
     const ctrlObj = {
         ctrlKey: ['Ctrl', 'Ctrl', 'Ctrl', 'Ctrl', 'Ктрл', 'Ктрл', 'Ктрл', 'Ктрл'],
-        winKey: ['Win', 'Win', 'Win', 'Окна', 'Окна', 'Окна', 'Окна'],
+        winKey: ['Win', 'Win', 'Win', 'Win', 'Окна', 'Окна', 'Окна'],
         altKey: ['Alt', 'Alt', 'Alt', 'Alt', 'Альт', 'Альт', 'Альт', 'Альт'],
         spaceKey: ['Space', 'Space', 'Space', 'Space', 'Пробел', 'Пробел', 'Пробел', 'Пробел'],
         raltKey: ['Alt', 'Alt', 'Alt', 'Alt', 'Альт', 'Альт', 'Альт', 'Альт'],
@@ -188,12 +188,14 @@ const CASE_UP = document.querySelectorAll('.caseUp');
 const CAPS = document.querySelectorAll('.caps');
 const SHIFT_CAPS = document.querySelectorAll('.shiftCaps');
 
+console.log(KEYBOARD);
+
+let isCapsLocked = false;
 function toggleCaps() {
-    let isCapsLocked = false;
 
     function capsLogic() {
         if (!isCapsLocked) {
-            KEYBOARD[28].classList.add('capsLocked');
+            KEYBOARD[28].classList.add('pushed');
             CASE_DOWN.forEach(element => {
                 element.classList.add('hidden');
             });
@@ -202,7 +204,7 @@ function toggleCaps() {
             });
             isCapsLocked = true;
         } else {
-            KEYBOARD[28].classList.remove('capsLocked');
+            KEYBOARD[28].classList.remove('pushed');
             CASE_DOWN.forEach(element => {
                 element.classList.remove('hidden');
             });
@@ -221,9 +223,66 @@ function toggleCaps() {
             capsLogic();
         }
     });
-
 }
 toggleCaps();
 
-console.log(KEYBOARD);
+function pushLogic(pushStatus, key, caseType, caseLast = CASE_DOWN) {
+    if (pushStatus) {
+        KEYBOARD[key].classList.add('pushed');
+        caseLast.forEach(element => {
+            element.classList.add('hidden');
+        });
+        caseType.forEach(element => {
+            element.classList.remove('hidden');
+        });
+    } else {
+        KEYBOARD[key].classList.remove('pushed');
+        caseLast.forEach(element => {
+            element.classList.remove('hidden');
+        });
+        caseType.forEach(element => {
+            element.classList.add('hidden');
+        });
+    }
+}  // pushStatus: true - кнопка отжата, false - кнопка отжата,
+// key: номер кнопки из массива KEYBOARD,
+// caseType: в какой кейс будет поставлена кнопка, пока будет нажата,
+// caseLast: в какой кейс вернется кнопка, когда будет отжата
 
+function turnOnShift() {
+    KEYBOARD[41].addEventListener('mousedown', () => {
+        if (isCapsLocked == false) {
+            pushLogic(true, 41, CASE_UP);
+        } else {
+            pushLogic(true, 41, SHIFT_CAPS, CAPS);
+        }
+    });
+    KEYBOARD[41].addEventListener('mouseup', () => {
+        if (isCapsLocked == false) {
+            pushLogic(false, 41, CASE_UP);
+        } else {
+            pushLogic(false, 41, SHIFT_CAPS, CAPS);
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.code == "ShiftLeft") {
+            if (isCapsLocked == false) {
+                pushLogic(true, 41, CASE_UP);
+            } else {
+                pushLogic(true, 41, SHIFT_CAPS, CAPS);
+            }
+        }
+    });
+    document.addEventListener('keyup', (event) => {
+        if (event.code == "ShiftLeft") {
+            if (isCapsLocked == false) {
+                pushLogic(false, 41, CASE_UP);
+            } else {
+                pushLogic(false, 41, SHIFT_CAPS, CAPS);
+            }
+        }
+    });
+
+}
+turnOnShift();
