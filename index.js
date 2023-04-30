@@ -188,29 +188,87 @@ const CASE_UP = document.querySelectorAll('.caseUp');
 const CAPS = document.querySelectorAll('.caps');
 const SHIFT_CAPS = document.querySelectorAll('.shiftCaps');
 
-console.log(KEYBOARD);
+console.log('KEYS: ', KEYBOARD);
+
+function pushLogic(pushStatus, key) {
+    if (pushStatus) {
+        KEYBOARD[key].classList.add('pushed');
+    } else {
+        KEYBOARD[key].classList.remove('pushed');
+    }
+}  // pushStatus: true - кнопка нажата, false - кнопка отжата,
+// key: номер кнопки из массива KEYBOARD
+
+function caseToggle(caseName) {
+    if (caseName === CASE_DOWN) {
+        CASE_DOWN.forEach(element => {
+            element.classList.remove('hidden');
+        });
+        CASE_UP.forEach(element => {
+            element.classList.add('hidden');
+        });
+        CAPS.forEach(element => {
+            element.classList.add('hidden');
+        });
+        SHIFT_CAPS.forEach(element => {
+            element.classList.add('hidden');
+        });
+    }
+    if (caseName === CASE_UP) {
+        CASE_DOWN.forEach(element => {
+            element.classList.add('hidden');
+        });
+        CASE_UP.forEach(element => {
+            element.classList.remove('hidden');
+        });
+        CAPS.forEach(element => {
+            element.classList.add('hidden');
+        });
+        SHIFT_CAPS.forEach(element => {
+            element.classList.add('hidden');
+        });
+    }
+    if (caseName === CAPS) {
+        CASE_DOWN.forEach(element => {
+            element.classList.add('hidden');
+        });
+        CASE_UP.forEach(element => {
+            element.classList.add('hidden');
+        });
+        CAPS.forEach(element => {
+            element.classList.remove('hidden');
+        });
+        SHIFT_CAPS.forEach(element => {
+            element.classList.add('hidden');
+        });
+    }
+    if (caseName === SHIFT_CAPS) {
+        CASE_DOWN.forEach(element => {
+            element.classList.add('hidden');
+        });
+        CASE_UP.forEach(element => {
+            element.classList.add('hidden');
+        });
+        CAPS.forEach(element => {
+            element.classList.add('hidden');
+        });
+        SHIFT_CAPS.forEach(element => {
+            element.classList.remove('hidden');
+        });
+    }
+} // передаем название кейса - снимается его хидден, с этого кейса. Добавляется хидден к остальным кейсам.
 
 let isCapsLocked = false;
 function toggleCaps() {
 
     function capsLogic() {
         if (!isCapsLocked) {
-            KEYBOARD[28].classList.add('pushed');
-            CASE_DOWN.forEach(element => {
-                element.classList.add('hidden');
-            });
-            CAPS.forEach(element => {
-                element.classList.remove('hidden');
-            });
+            pushLogic(true, 28);
+            caseToggle(CAPS);
             isCapsLocked = true;
         } else {
-            KEYBOARD[28].classList.remove('pushed');
-            CASE_DOWN.forEach(element => {
-                element.classList.remove('hidden');
-            });
-            CAPS.forEach(element => {
-                element.classList.add('hidden');
-            });
+            pushLogic(false, 28);
+            caseToggle(CASE_DOWN);
             isCapsLocked = false;
         }
     }
@@ -226,63 +284,93 @@ function toggleCaps() {
 }
 toggleCaps();
 
-function pushLogic(pushStatus, key, caseType, caseLast = CASE_DOWN) {
-    if (pushStatus) {
-        KEYBOARD[key].classList.add('pushed');
-        caseLast.forEach(element => {
-            element.classList.add('hidden');
-        });
-        caseType.forEach(element => {
-            element.classList.remove('hidden');
-        });
-    } else {
-        KEYBOARD[key].classList.remove('pushed');
-        caseLast.forEach(element => {
-            element.classList.remove('hidden');
-        });
-        caseType.forEach(element => {
-            element.classList.add('hidden');
-        });
-    }
-}  // pushStatus: true - кнопка отжата, false - кнопка отжата,
-// key: номер кнопки из массива KEYBOARD,
-// caseType: в какой кейс будет поставлена кнопка, пока будет нажата,
-// caseLast: в какой кейс вернется кнопка, когда будет отжата
+
 
 function turnOnShift() {
-    KEYBOARD[41].addEventListener('mousedown', () => {
+    function behaviourDown() {
         if (isCapsLocked == false) {
-            pushLogic(true, 41, CASE_UP);
+            caseToggle(CASE_UP);
         } else {
-            pushLogic(true, 41, SHIFT_CAPS, CAPS);
+            caseToggle(SHIFT_CAPS);
         }
+    }
+
+    function behaviourUp() {
+        if (isCapsLocked == false) {
+            caseToggle(CASE_DOWN);
+        } else {
+            caseToggle(CAPS);
+        }
+    }
+
+    KEYBOARD[41].addEventListener('mousedown', () => {
+        behaviourDown();
     });
     KEYBOARD[41].addEventListener('mouseup', () => {
-        if (isCapsLocked == false) {
-            pushLogic(false, 41, CASE_UP);
-        } else {
-            pushLogic(false, 41, SHIFT_CAPS, CAPS);
-        }
+        behaviourUp();
+    });
+    KEYBOARD[53].addEventListener('mousedown', () => {
+        behaviourDown();
+    });
+    KEYBOARD[53].addEventListener('mouseup', () => {
+        behaviourUp();
     });
 
     document.addEventListener('keydown', (event) => {
         if (event.code == "ShiftLeft") {
-            if (isCapsLocked == false) {
-                pushLogic(true, 41, CASE_UP);
-            } else {
-                pushLogic(true, 41, SHIFT_CAPS, CAPS);
-            }
+            behaviourDown();
+            pushLogic(true, 41);
         }
     });
     document.addEventListener('keyup', (event) => {
         if (event.code == "ShiftLeft") {
-            if (isCapsLocked == false) {
-                pushLogic(false, 41, CASE_UP);
-            } else {
-                pushLogic(false, 41, SHIFT_CAPS, CAPS);
-            }
+            behaviourUp();
+            pushLogic(false, 41);
         }
     });
-
+    document.addEventListener('keydown', (event) => {
+        if (event.code == "ShiftRight") {
+            behaviourDown();
+            pushLogic(true, 53);
+        }
+    });
+    document.addEventListener('keyup', (event) => {
+        if (event.code == "ShiftRight") {
+            behaviourUp();
+            pushLogic(false, 53);
+        }
+    });
 }
 turnOnShift();
+
+
+const EN_LANG = document.querySelectorAll('.eng');
+const RU_LANG = document.querySelectorAll('.rus');
+
+function toggleLanguage() {
+    console.log('ENGLISH: ', EN_LANG);
+    console.log('RUSSIAN: ', RU_LANG);
+
+    KEYBOARD[54].addEventListener('mousedown', () => {
+        pushLogic(true, 54, RU_LANG, EN_LANG);
+        pushLogic(true, 54, CASE_DOWN);
+    });
+
+    KEYBOARD[54].addEventListener('mouseup', () => {
+        pushLogic(false, 54, RU_LANG, EN_LANG);
+        // pushLogic(true, 54, CASE_DOWN);
+    });
+
+    // document.addEventListener('keydown', (event) => {
+    //     if (event.code == "ShiftLeft") {
+    //             pushLogic(true, 54, SHIFT_CAPS, CAPS);
+    //     }
+    // });
+    // document.addEventListener('keyup', (event) => {
+    //     if (event.code == "ShiftLeft") {
+    //             pushLogic(false, 54, SHIFT_CAPS, CAPS);
+    //     }
+    // });
+
+}
+// toggleLanguage();
