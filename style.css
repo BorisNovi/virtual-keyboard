@@ -116,7 +116,7 @@ body {
 
 .fnKey {
     width: 34px;
-    cursor: auto;
+    /* cursor: auto; */
     color: brown;
 }
 

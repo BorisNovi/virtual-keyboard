@@ -21,7 +21,7 @@ function drawHTML() {
     const tabObj = {
         tabKey: ['Tab', 'Tab', 'Tab', 'Tab', 'Таб', 'Таб', 'Таб', 'Таб'],
         qKey: ['q', 'Q', 'Q', 'q', 'й', 'Й', 'Й', 'й'],
-        wKey: ['w', 'W', 'W', 'w', 'й', 'Й', 'Й', 'й'],
+        wKey: ['w', 'W', 'W', 'w', 'ц', 'Ц', 'Ц', 'ц'],
         eKey: ['e', 'E', 'E', 'e', 'у', 'У', 'У', 'у'],
         rKey: ['r', 'R', 'R', 'r', 'к', 'К', 'К', 'к'],
         tKey: ['t', 'T', 'T', 't', 'е', 'Е', 'Е', 'е'],
@@ -66,7 +66,7 @@ function drawHTML() {
     };
     const ctrlObj = {
         ctrlKey: ['Ctrl', 'Ctrl', 'Ctrl', 'Ctrl', 'Ктрл', 'Ктрл', 'Ктрл', 'Ктрл'],
-        winKey: ['Win', 'Win', 'Win', 'Win', 'Окна', 'Окна', 'Окна'],
+        winKey: ['Win', 'Win', 'Win', 'Win', 'Окна', 'Окна', 'Окна', 'Окна'],
         altKey: ['Alt', 'Alt', 'Alt', 'Alt', 'Альт', 'Альт', 'Альт', 'Альт'],
         spaceKey: ['Space', 'Space', 'Space', 'Space', 'Пробел', 'Пробел', 'Пробел', 'Пробел'],
         raltKey: ['Alt', 'Alt', 'Alt', 'Alt', 'Альт', 'Альт', 'Альт', 'Альт'],
@@ -74,7 +74,7 @@ function drawHTML() {
         larrKey: ['&#9668;', '&#9668;', '&#9668;', '&#9668;', '&#9668;', '&#9668;', '&#9668;', '&#9668;',],
         barrKey: ['&#9660;', '&#9660;', '&#9660;', '&#9660;', '&#9660;', '&#9660;', '&#9660;', '&#9660;'],
         rarrKey: ['&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;', '&#9658;'],
-        fnKey: ['&#9679;', '&#9679;', '&#9679;', '&#9679;', '&#9679;', '&#9679;', '&#9679;', '&#9679;']
+        fnKey: ['EN', 'EN', 'EN', 'EN', 'RU', 'RU', 'RU', 'RU']
     };
 
     document.body.innerHTML = `<div class="container">
@@ -259,7 +259,7 @@ function caseToggle(caseName) {
 } // передаем название кейса - снимается его хидден, с этого кейса. Добавляется хидден к остальным кейсам.
 
 let isCapsLocked = false;
-function toggleCaps() {
+function turnOnCaps() {
 
     function capsLogic() {
         if (!isCapsLocked) {
@@ -282,9 +282,7 @@ function toggleCaps() {
         }
     });
 }
-toggleCaps();
-
-
+turnOnCaps();
 
 function turnOnShift() {
     function behaviourDown() {
@@ -346,31 +344,71 @@ turnOnShift();
 
 const EN_LANG = document.querySelectorAll('.eng');
 const RU_LANG = document.querySelectorAll('.rus');
+const LANG_KEY = 'lang';
 
-function toggleLanguage() {
-    console.log('ENGLISH: ', EN_LANG);
-    console.log('RUSSIAN: ', RU_LANG);
+function langToggle(langName) {
+    if (langName === 'en') {
+        localStorage.setItem(LANG_KEY, 'en');
+        EN_LANG.forEach(element => {
+            element.classList.remove('hidden');
+        });
+        RU_LANG.forEach(element => {
+            element.classList.add('hidden');
+        });
+    }
+    if (langName === 'ru') {
+        localStorage.setItem(LANG_KEY, 'ru');
+        EN_LANG.forEach(element => {
+            element.classList.add('hidden');
+        });
+        RU_LANG.forEach(element => {
+            element.classList.remove('hidden');
+            caseToggle(CASE_DOWN);
+            currentLanguage = true; // для исключения необходимости кликать на кнопку дважды, если пердыдущее состояние ru
+        });
+    }
+} // переключатель языка аналогичный переключателю кейсов, но с хранинием значения языка в localStorage
 
-    KEYBOARD[54].addEventListener('mousedown', () => {
-        pushLogic(true, 54, RU_LANG, EN_LANG);
-        pushLogic(true, 54, CASE_DOWN);
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem(LANG_KEY);
+    if (savedLang === 'ru') {
+        langToggle('ru');
+    } else {
+        langToggle('en');
+    }
+}); // при загрузке страницы чекаем localStorage на язык
+
+
+let currentLanguage = false;
+function switchLang() {
+    function langLogic() {
+        if (!currentLanguage) {
+            langToggle('ru');
+            currentLanguage = true;
+        } else {
+            langToggle('en');
+            currentLanguage = false;
+        }
+    }
+    KEYBOARD[63].addEventListener('mousedown', () => {
+        langLogic();
     });
 
-    KEYBOARD[54].addEventListener('mouseup', () => {
-        pushLogic(false, 54, RU_LANG, EN_LANG);
-        // pushLogic(true, 54, CASE_DOWN);
+    document.addEventListener('keydown', function (event) {
+        if (event.altKey && event.shiftKey) {
+            langLogic();
+        }
     });
-
-    // document.addEventListener('keydown', (event) => {
-    //     if (event.code == "ShiftLeft") {
-    //             pushLogic(true, 54, SHIFT_CAPS, CAPS);
-    //     }
-    // });
-    // document.addEventListener('keyup', (event) => {
-    //     if (event.code == "ShiftLeft") {
-    //             pushLogic(false, 54, SHIFT_CAPS, CAPS);
-    //     }
-    // });
-
 }
-// toggleLanguage();
+switchLang();
+
+function typeMouse() {
+    KEYBOARD.forEach((key) => {
+        key.addEventListener('click', () => console.log(key.className))
+    });
+
+    let textarea = document.querySelector(".keyboard-textarea");
+    textarea.value += "Проверка добавления текста";
+    textarea.value += " жопа ";
+}
+typeMouse();
