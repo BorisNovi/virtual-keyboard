@@ -391,7 +391,7 @@ function switchLang() {
             currentLanguage = false;
         }
     }
-    KEYBOARD[63].addEventListener('mousedown', () => {
+    KEYBOARD[64].addEventListener('mousedown', () => {
         langLogic();
     });
 
@@ -439,11 +439,6 @@ function typeKeyboard() {
                     console.log('Letter:', key.innerText, 'Class: ', key.classList[1]);
                     TEXTAREA.value += key.innerText;
                 }
-                if (event.code == 'Backspace') {
-                    let currentValue = TEXTAREA.value;
-                    let newValue = currentValue.substring(0, currentValue.length - 1);
-                    TEXTAREA.value = newValue;
-                }
                 if (event.code == 'Delete') {
                     let currentValue = TEXTAREA.value;
                     let selectionStart = TEXTAREA.selectionStart;
@@ -452,6 +447,22 @@ function typeKeyboard() {
                     TEXTAREA.value = newValue;
                     TEXTAREA.selectionStart = selectionStart;
                     TEXTAREA.selectionEnd = selectionStart;
+                }
+                let currentPos = TEXTAREA.selectionStart;
+                let newValue = null;
+                if (event.code === 'Backspace') {
+                    if (currentPos > 0) {
+                        // Delete left symbol
+                        let prefix = TEXTAREA.value.substring(0, currentPos - 1);
+                        let suffix = TEXTAREA.value.substring(currentPos);
+                        newValue = prefix + suffix;
+                    }
+                }
+                if (newValue !== null) {
+                    // Update textarea and move to new position
+                    TEXTAREA.value = newValue;
+                    TEXTAREA.setSelectionRange(currentPos - 1, currentPos - 1);
+                    return false;
                 }
                 if (event.code == 'Tab') {
                     TEXTAREA.value += '    ';
@@ -475,20 +486,19 @@ typeKeyboard()
 
 function moveCursor() {
     TEXTAREA.addEventListener('keydown', function (event) {
-        let keyCode = event.keyCode;
+        let keyCode = event.key;
         let currentPos = this.selectionStart;
         let newPos = null;
-        if (keyCode === 37) { // Left
+        if (keyCode === 'ArrowLeft') { // Left
             newPos = currentPos - 1;
-        } else if (keyCode === 38) { // Up
+        } else if (keyCode === 'ArrowUp') { // Up
             // To start of last string
-            let currentLine = this.value.substr(0, currentPos).split("\n").length - 1;
             let currentLineStart = this.value.lastIndexOf('\n', currentPos - 1) + 1;
             let prevLineStart = this.value.lastIndexOf('\n', currentLineStart - 2) + 1;
             newPos = prevLineStart + Math.min(currentPos - currentLineStart, this.value.substr(prevLineStart).length);
-        } else if (keyCode === 39) { // Right
+        } else if (keyCode === 'ArrowRight') { // Right
             newPos = currentPos + 1;
-        } else if (keyCode === 40) { // Down
+        } else if (keyCode === 'ArrowDown') { // Down
             // To start of next string
             let currentLineStart = this.value.lastIndexOf('\n', currentPos - 1) + 1;
             let nextLineStart = this.value.indexOf('\n', currentPos);
@@ -508,4 +518,40 @@ function moveCursor() {
 }
 moveCursor();
 
+function moveCursorByClick() {
+    for (let i = 0; i < KEYBOARD.length; i++) {
+        KEYBOARD[i].addEventListener('mousedown', function (event) {
+            TEXTAREA.focus();
+            let keyCode = KEYBOARD[i].classList[1];
+            let currentPos = TEXTAREA.selectionStart;
+            let newPos = null;
+            if (keyCode === 'ArrowLeft') { // Left
+                newPos = currentPos - 1;
+            } else if (keyCode === 'ArrowUp') { // Up
+                // To start of last string
+                let currentLineStart = TEXTAREA.value.lastIndexOf('\n', currentPos - 1) + 1;
+                let prevLineStart = TEXTAREA.value.lastIndexOf('\n', currentLineStart - 2) + 1;
+                newPos = prevLineStart + Math.min(currentPos - currentLineStart, TEXTAREA.value.substr(prevLineStart).length);
+            } else if (keyCode === 'ArrowRight') { // Right
+                newPos = currentPos + 1;
+            } else if (keyCode === 'ArrowDown') { // Down
+                // To start of next string
+                let currentLineStart = TEXTAREA.value.lastIndexOf('\n', currentPos - 1) + 1;
+                let nextLineStart = TEXTAREA.value.indexOf('\n', currentPos);
+                if (nextLineStart === -1) {
+                    newPos = TEXTAREA.value.length;
+                } else {
+                    newPos = nextLineStart + Math.min(currentPos - currentLineStart, TEXTAREA.value.substr(nextLineStart).length);
+                }
+            }
+            if (newPos !== null) {
+                // To new position
+                TEXTAREA.setSelectionRange(newPos, newPos);
+                event.preventDefault();
+                return false;
+            }
+        });
+    }
+}
+moveCursorByClick();
 
