@@ -449,6 +449,9 @@ function typeKeyboard() {
                 if (event.code == 'Tab') {
                     TEXTAREA.value += '    ';
                 }
+                if (event.code == 'Enter') {
+                    TEXTAREA.value += '\n';
+                }
                 if (event.code == 'Space') {
                     TEXTAREA.value += ' ';
                 }
