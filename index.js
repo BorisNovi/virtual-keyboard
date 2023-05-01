@@ -33,7 +33,7 @@ function drawHTML() {
         BracketLeft: ['&lbrack;', '&lcub;', '&lbrack;', '&lcub;', 'х', 'Х', 'Х', 'х'],
         BracketRight: ['&rbrack;', '&rcub;', '&rbrack;', '&rcub;', 'ъ', 'Ъ', 'Ъ', 'ъ'],
         Backslash: ['\\', '|', '\\', '|', '\\', '/', '\\', '/'],
-        Delete: ['Del', 'Del', 'Del', 'Del', 'Del', 'Del', 'Del', 'Del']
+        Delete: ['Del', 'Del', 'Del', 'Del', 'Удал', 'Удал', 'Удал', 'Удал']
     };
     const capsObj = {
         CapsKey: ['Caps', 'Caps', 'Caps', 'Caps', 'Кричать', 'Кричать', 'Кричать', 'Кричать'],
@@ -484,6 +484,62 @@ function typeKeyboard() {
 }
 typeKeyboard()
 
+function typeMouse() {
+    for (let i = 0; i < KEYBOARD.length; i++) {
+        KEYBOARD[i].addEventListener('mousedown', () => {
+            let key = KEYBOARD[i];
+            let keyCode = KEYBOARD[i].classList[1];
+
+            console.log(keyCode);
+            console.log(keyCode, key);
+            if (keyCode.slice(0, 3) === 'Key' ||
+                keyCode.slice(0, 3) === 'Dig' ||
+                keyCode.slice(0, 3) === 'Min' ||
+                keyCode.slice(0, 3) === 'Equ' ||
+                keyCode.slice(0, 3) === 'Bra' ||
+                keyCode == 'Backslash' ||
+                keyCode == 'Slash') {
+                TEXTAREA.value += key.innerText;
+            }
+            if (keyCode == 'Delete') {
+                let currentValue = TEXTAREA.value;
+                let selectionStart = TEXTAREA.selectionStart;
+                let selectionEnd = TEXTAREA.selectionEnd;
+                let newValue = currentValue.substring(0, selectionStart) + currentValue.substring(selectionEnd + 1);
+                TEXTAREA.value = newValue;
+                TEXTAREA.selectionStart = selectionStart;
+                TEXTAREA.selectionEnd = selectionStart;
+            }
+            let currentPos = TEXTAREA.selectionStart;
+            let newValue = null;
+            if (keyCode === 'Backspace') {
+                if (currentPos > 0) {
+                    // Delete left symbol
+                    let prefix = TEXTAREA.value.substring(0, currentPos - 1);
+                    let suffix = TEXTAREA.value.substring(currentPos);
+                    newValue = prefix + suffix;
+                }
+            }
+            if (newValue !== null) {
+                // Update textarea and move to new position
+                TEXTAREA.value = newValue;
+                TEXTAREA.setSelectionRange(currentPos - 1, currentPos - 1);
+                return false;
+            }
+            if (keyCode == 'Tab') {
+                TEXTAREA.value += '    ';
+            }
+            if (keyCode == 'Enter') {
+                TEXTAREA.value += '\n';
+            }
+            if (keyCode == 'Space') {
+                TEXTAREA.value += ' ';
+            }
+        })
+    }
+}
+typeMouse();
+
 function moveCursor() {
     TEXTAREA.addEventListener('keydown', function (event) {
         let keyCode = event.key;
@@ -521,21 +577,24 @@ moveCursor();
 function moveCursorByClick() {
     for (let i = 0; i < KEYBOARD.length; i++) {
         KEYBOARD[i].addEventListener('mousedown', function (event) {
-            TEXTAREA.focus();
             let keyCode = KEYBOARD[i].classList[1];
             let currentPos = TEXTAREA.selectionStart;
             let newPos = null;
             if (keyCode === 'ArrowLeft') { // Left
+                TEXTAREA.focus();
                 newPos = currentPos - 1;
             } else if (keyCode === 'ArrowUp') { // Up
                 // To start of last string
+                TEXTAREA.focus();
                 let currentLineStart = TEXTAREA.value.lastIndexOf('\n', currentPos - 1) + 1;
                 let prevLineStart = TEXTAREA.value.lastIndexOf('\n', currentLineStart - 2) + 1;
                 newPos = prevLineStart + Math.min(currentPos - currentLineStart, TEXTAREA.value.substr(prevLineStart).length);
             } else if (keyCode === 'ArrowRight') { // Right
+                TEXTAREA.focus();
                 newPos = currentPos + 1;
             } else if (keyCode === 'ArrowDown') { // Down
                 // To start of next string
+                TEXTAREA.focus();
                 let currentLineStart = TEXTAREA.value.lastIndexOf('\n', currentPos - 1) + 1;
                 let nextLineStart = TEXTAREA.value.indexOf('\n', currentPos);
                 if (nextLineStart === -1) {
