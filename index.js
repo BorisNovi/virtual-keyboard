@@ -88,6 +88,8 @@ function drawHTML() {
         <div class="keyboard-row row shiftkeys"></div>
         <div class="keyboard-row row ctrlkeys"></div>
     </div>
+    <p class="keyboard-notice">Переключение языка - ShiftLeft + AltLeft, либо кнопка с указанием языка.</p>
+    <p class="keyboard-notice">Создано в ОС Windows.</p>
 `; // Body
 
     const NUM_INSERT = document.querySelector('.numkeys');
@@ -426,8 +428,7 @@ function typeKeyboard() {
         document.addEventListener('keydown', event => {
             event.preventDefault();
             TEXTAREA.focus();
-            console.log(event.code);
-            // console.log(event.code, key.classList[1]);
+
             if (event.code === key.classList[1]) {
                 if (event.code.slice(0, 3) === 'Key' ||
                     event.code.slice(0, 3) === 'Dig' ||
@@ -436,7 +437,7 @@ function typeKeyboard() {
                     event.code.slice(0, 3) === 'Bra' ||
                     event.code == 'Backslash' ||
                     event.code == 'Slash') {
-                    console.log('Letter:', key.innerText, 'Class: ', key.classList[1]);
+
                     TEXTAREA.value += key.innerText;
                 }
                 if (event.code == 'Delete') {
@@ -490,8 +491,6 @@ function typeMouse() {
             let key = KEYBOARD[i];
             let keyCode = KEYBOARD[i].classList[1];
 
-            console.log(keyCode);
-            console.log(keyCode, key);
             if (keyCode.slice(0, 3) === 'Key' ||
                 keyCode.slice(0, 3) === 'Dig' ||
                 keyCode.slice(0, 3) === 'Min' ||
