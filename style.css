@@ -74,11 +74,11 @@ body {
 }
 
 .Tab {
-    width: 81px;
+    width: 61px;
 }
 
 .CapsKey {
-    width: 90px;
+    width: 100px;
 }
 
 .pushed{
@@ -87,11 +87,11 @@ body {
 }
 
 .shiftKey {
-    width: 98px;
+    width: 118px;
 }
 
 .ControlLeft {
-    width: 80px;
+    width: 100px;
 }
 
 .Space {
@@ -99,23 +99,23 @@ body {
 }
 
 .Backspace {
-    width: 80px;
+    width: 120px;
 }
 
 .Enter {
-    width: 100px;
+    width: 128px;
 }
 
 .rshiftKey {
-    width: 92px;
+    width: 110px;
 }
 
-.rctrlKey {
-    width: 50px;
-}
+/* .rctrlKey {
+    width: 120px;
+} */
 
 .fnKey {
-    width: 34px;
+    width: 52px;
     /* cursor: auto; */
     color: brown;
 }

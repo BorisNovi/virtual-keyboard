@@ -32,7 +32,8 @@ function drawHTML() {
         KeyP: ['p', 'P', 'P', 'p', 'з', 'З', 'З', 'з'],
         BracketLeft: ['&lbrack;', '&lcub;', '&lbrack;', '&lcub;', 'х', 'Х', 'Х', 'х'],
         BracketRight: ['&rbrack;', '&rcub;', '&rbrack;', '&rcub;', 'ъ', 'Ъ', 'Ъ', 'ъ'],
-        Backslash: ['\\', '|', '\\', '|', '\\', '/', '\\', '/']
+        Backslash: ['\\', '|', '\\', '|', '\\', '/', '\\', '/'],
+        Delete: ['Del', 'Del', 'Del', 'Del', 'Del', 'Del', 'Del', 'Del']
     };
     const capsObj = {
         CapsKey: ['Caps', 'Caps', 'Caps', 'Caps', 'Кричать', 'Кричать', 'Кричать', 'Кричать'],
@@ -263,16 +264,16 @@ function turnOnCaps() {
 
     function capsLogic() {
         if (!isCapsLocked) {
-            pushLogic(true, 28);
+            pushLogic(true, 29);
             caseToggle(CAPS);
             isCapsLocked = true;
         } else {
-            pushLogic(false, 28);
+            pushLogic(false, 29);
             caseToggle(CASE_DOWN);
             isCapsLocked = false;
         }
     }
-    KEYBOARD[28].addEventListener('click', () => {
+    KEYBOARD[29].addEventListener('click', () => {
         capsLogic()
     });
 
@@ -301,41 +302,41 @@ function turnOnShift() {
         }
     }
 
-    KEYBOARD[41].addEventListener('mousedown', () => {
+    KEYBOARD[42].addEventListener('mousedown', () => {
         behaviourDown();
     });
-    KEYBOARD[41].addEventListener('mouseup', () => {
+    KEYBOARD[42].addEventListener('mouseup', () => {
         behaviourUp();
     });
-    KEYBOARD[53].addEventListener('mousedown', () => {
+    KEYBOARD[54].addEventListener('mousedown', () => {
         behaviourDown();
     });
-    KEYBOARD[53].addEventListener('mouseup', () => {
+    KEYBOARD[54].addEventListener('mouseup', () => {
         behaviourUp();
     });
 
     document.addEventListener('keydown', (event) => {
         if (event.code == "ShiftLeft") {
             behaviourDown();
-            pushLogic(true, 41);
+            pushLogic(true, 42);
         }
     });
     document.addEventListener('keyup', (event) => {
         if (event.code == "ShiftLeft") {
             behaviourUp();
-            pushLogic(false, 41);
+            pushLogic(false, 42);
         }
     });
     document.addEventListener('keydown', (event) => {
         if (event.code == "ShiftRight") {
             behaviourDown();
-            pushLogic(true, 53);
+            pushLogic(true, 54);
         }
     });
     document.addEventListener('keyup', (event) => {
         if (event.code == "ShiftRight") {
             behaviourUp();
-            pushLogic(false, 53);
+            pushLogic(false, 54);
         }
     });
 }
@@ -406,7 +407,6 @@ function lightKeyboard() {
     KEYBOARD.forEach(key => {
         document.addEventListener('keydown', event => {
             event.preventDefault();
-            // console.log(event.code, key.classList[1]);
             if (event.code === key.classList[1]) {
                 key.classList.add("pushed");
             }
@@ -417,8 +417,6 @@ function lightKeyboard() {
             }
         });
     });
-
-    //     textarea.value += " жопа ";
 }
 lightKeyboard();
 
@@ -427,6 +425,7 @@ function typeKeyboard() {
     KEYBOARD.forEach(key => {
         document.addEventListener('keydown', event => {
             event.preventDefault();
+            TEXTAREA.focus();
             console.log(event.code);
             // console.log(event.code, key.classList[1]);
             if (event.code === key.classList[1]) {
@@ -437,14 +436,22 @@ function typeKeyboard() {
                     event.code.slice(0, 3) === 'Bra' ||
                     event.code == 'Backslash' ||
                     event.code == 'Slash') {
-                    console.log(key.innerText, key.classList[1], event.code.slice(0, 3));
+                    console.log('Letter:', key.innerText, 'Class: ', key.classList[1]);
                     TEXTAREA.value += key.innerText;
                 }
-                // key.classList.add("pushed");
                 if (event.code == 'Backspace') {
                     let currentValue = TEXTAREA.value;
                     let newValue = currentValue.substring(0, currentValue.length - 1);
                     TEXTAREA.value = newValue;
+                }
+                if (event.code == 'Delete') {
+                    let currentValue = TEXTAREA.value;
+                    let selectionStart = TEXTAREA.selectionStart;
+                    let selectionEnd = TEXTAREA.selectionEnd;
+                    let newValue = currentValue.substring(0, selectionStart) + currentValue.substring(selectionEnd + 1);
+                    TEXTAREA.value = newValue;
+                    TEXTAREA.selectionStart = selectionStart;
+                    TEXTAREA.selectionEnd = selectionStart;
                 }
                 if (event.code == 'Tab') {
                     TEXTAREA.value += '    ';
@@ -455,7 +462,6 @@ function typeKeyboard() {
                 if (event.code == 'Space') {
                     TEXTAREA.value += ' ';
                 }
-
             }
         });
         document.addEventListener('keyup', event => {
@@ -466,3 +472,40 @@ function typeKeyboard() {
     });
 }
 typeKeyboard()
+
+function moveCursor() {
+    TEXTAREA.addEventListener('keydown', function (event) {
+        let keyCode = event.keyCode;
+        let currentPos = this.selectionStart;
+        let newPos = null;
+        if (keyCode === 37) { // Left
+            newPos = currentPos - 1;
+        } else if (keyCode === 38) { // Up
+            // To start of last string
+            let currentLine = this.value.substr(0, currentPos).split("\n").length - 1;
+            let currentLineStart = this.value.lastIndexOf('\n', currentPos - 1) + 1;
+            let prevLineStart = this.value.lastIndexOf('\n', currentLineStart - 2) + 1;
+            newPos = prevLineStart + Math.min(currentPos - currentLineStart, this.value.substr(prevLineStart).length);
+        } else if (keyCode === 39) { // Right
+            newPos = currentPos + 1;
+        } else if (keyCode === 40) { // Down
+            // To start of next string
+            let currentLineStart = this.value.lastIndexOf('\n', currentPos - 1) + 1;
+            let nextLineStart = this.value.indexOf('\n', currentPos);
+            if (nextLineStart === -1) {
+                newPos = this.value.length;
+            } else {
+                newPos = nextLineStart + Math.min(currentPos - currentLineStart, this.value.substr(nextLineStart).length);
+            }
+        }
+        if (newPos !== null) {
+            // To new position
+            this.setSelectionRange(newPos, newPos);
+            event.preventDefault();
+            return false;
+        }
+    });
+}
+moveCursor();
+
+
