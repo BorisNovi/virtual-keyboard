@@ -73,11 +73,11 @@ body {
     transform: scale(0.97);
 }
 
-.tabKey {
+.Tab {
     width: 81px;
 }
 
-.capsKey {
+.CapsKey {
     width: 90px;
 }
 
@@ -90,19 +90,19 @@ body {
     width: 98px;
 }
 
-.ctrlKey {
+.ControlLeft {
     width: 80px;
 }
 
-.spaceKey {
+.Space {
     width: 301px;
 }
 
-.backKey {
+.Backspace {
     width: 80px;
 }
 
-.enterKey {
+.Enter {
     width: 100px;
 }
 
