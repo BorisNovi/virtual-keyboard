@@ -402,25 +402,64 @@ function switchLang() {
 }
 switchLang();
 
-function typeKeyboard() {
+function lightKeyboard() {
     KEYBOARD.forEach(key => {
         document.addEventListener('keydown', event => {
             event.preventDefault();
-            console.log(event.code, key.classList[1]);
+            // console.log(event.code, key.classList[1]);
             if (event.code === key.classList[1]) {
-                console.log(key.className);
                 key.classList.add("pushed");
             }
         });
         document.addEventListener('keyup', event => {
             if (event.code != 'CapsLock') {
-            key.classList.remove("pushed");
+                key.classList.remove("pushed");
             }
         });
     });
 
-    //     let textarea = document.querySelector(".keyboard-textarea");
-    //     textarea.value += "Проверка добавления текста";
     //     textarea.value += " жопа ";
 }
-typeKeyboard();
+lightKeyboard();
+
+const TEXTAREA = document.querySelector(".keyboard-textarea");
+function typeKeyboard() {
+    KEYBOARD.forEach(key => {
+        document.addEventListener('keydown', event => {
+            event.preventDefault();
+            console.log(event.code);
+            // console.log(event.code, key.classList[1]);
+            if (event.code === key.classList[1]) {
+                if (event.code.slice(0, 3) === 'Key' ||
+                    event.code.slice(0, 3) === 'Dig' ||
+                    event.code.slice(0, 3) === 'Min' ||
+                    event.code.slice(0, 3) === 'Equ' ||
+                    event.code.slice(0, 3) === 'Bra' ||
+                    event.code == 'Backslash' ||
+                    event.code == 'Slash') {
+                    console.log(key.innerText, key.classList[1], event.code.slice(0, 3));
+                    TEXTAREA.value += key.innerText;
+                }
+                // key.classList.add("pushed");
+                if (event.code == 'Backspace') {
+                    let currentValue = TEXTAREA.value;
+                    let newValue = currentValue.substring(0, currentValue.length - 1);
+                    TEXTAREA.value = newValue;
+                }
+                if (event.code == 'Tab') {
+                    TEXTAREA.value += '    ';
+                }
+                if (event.code == 'Space') {
+                    TEXTAREA.value += ' ';
+                }
+
+            }
+        });
+        document.addEventListener('keyup', event => {
+            if (event.code != 'CapsLock') {
+                // key.classList.remove("pushed");
+            }
+        });
+    });
+}
+typeKeyboard()
