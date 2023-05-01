@@ -575,7 +575,7 @@ function moveCursor() {
         newPos = this.value.length;
       } else {
         newPos = nextLineStart + Math
-          .min(currentPos - currentLineStart, this.value.substr(nextLineStart).length);
+          .min(currentPos - currentLineStart, this.value.substr(nextLineStart).length) + 1;
       }
     }
     if (newPos !== null) {
@@ -617,7 +617,7 @@ function moveCursorByClick() {
           newPos = TEXTAREA.value.length;
         } else {
           newPos = nextLineStart + Math
-            .min(currentPos - currentLineStart, TEXTAREA.value.substr(nextLineStart).length);
+            .min(currentPos - currentLineStart, TEXTAREA.value.substr(nextLineStart).length) + 1;
         }
       }
       if (newPos !== null) {
