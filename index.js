@@ -465,13 +465,19 @@ function typeKeyboard() {
           return false;
         }
         if (event.code === 'Tab') {
-          TEXTAREA.value += '    ';
+          const currentPosition = TEXTAREA.selectionStart;
+          TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + '    ' + TEXTAREA.value.substring(TEXTAREA.selectionEnd);
+          TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
         }
         if (event.code === 'Enter') {
-          TEXTAREA.value += '\n';
+          const currentPosition = TEXTAREA.selectionStart;
+          TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + '\r' + TEXTAREA.value.substring(TEXTAREA.selectionEnd);
+          TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
         }
         if (event.code === 'Space') {
-          TEXTAREA.value += ' ';
+          const currentPosition = TEXTAREA.selectionStart;
+          TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + ' ' + TEXTAREA.value.substring(TEXTAREA.selectionEnd);
+          TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
         }
       }
       return null;
@@ -526,13 +532,19 @@ function typeMouse() {
         return false;
       }
       if (keyCode === 'Tab') {
-        TEXTAREA.value += '    ';
+        const currentPosition = TEXTAREA.selectionStart;
+        TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + '    ' + TEXTAREA.value.substring(TEXTAREA.selectionEnd);
+        TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
       }
       if (keyCode === 'Enter') {
-        TEXTAREA.value += '\n';
+        const currentPosition = TEXTAREA.selectionStart;
+        TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + '\r' + TEXTAREA.value.substring(TEXTAREA.selectionEnd);
+        TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
       }
       if (keyCode === 'Space') {
-        TEXTAREA.value += ' ';
+        const currentPosition = TEXTAREA.selectionStart;
+        TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + ' ' + TEXTAREA.value.substring(TEXTAREA.selectionEnd);
+        TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
       }
       return null;
     });
