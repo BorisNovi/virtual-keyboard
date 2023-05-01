@@ -468,7 +468,9 @@ function typeKeyboard() {
           TEXTAREA.value += '    ';
         }
         if (event.code === 'Enter') {
-          TEXTAREA.value += '\n';
+          const currentPosition = TEXTAREA.selectionStart;
+          TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + '\r' + TEXTAREA.value.substring(TEXTAREA.selectionEnd);
+          TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
         }
         if (event.code === 'Space') {
           TEXTAREA.value += ' ';
@@ -529,7 +531,9 @@ function typeMouse() {
         TEXTAREA.value += '    ';
       }
       if (keyCode === 'Enter') {
-        TEXTAREA.value += '\n';
+        const currentPosition = TEXTAREA.selectionStart;
+        TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + '\r' + TEXTAREA.value.substring(TEXTAREA.selectionEnd);
+        TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
       }
       if (keyCode === 'Space') {
         TEXTAREA.value += ' ';
