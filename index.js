@@ -189,8 +189,6 @@ const CASE_UP = document.querySelectorAll('.caseUp');
 const CAPS = document.querySelectorAll('.caps');
 const SHIFT_CAPS = document.querySelectorAll('.shiftCaps');
 
-console.log('KEYS: ', KEYBOARD);
-
 function pushLogic(pushStatus, key) {
   if (pushStatus) {
     KEYBOARD[key].classList.add('pushed');
@@ -257,7 +255,8 @@ function caseToggle(caseName) {
       element.classList.remove('hidden');
     });
   }
-} // передаем название кейса - снимается его хидден, с этого кейса. Добавляется хидден к остальным кейсам.
+} // передаем название кейса - снимается его хидден,
+// с этого кейса. Добавляется хидден к остальным кейсам.
 
 let isCapsLocked = false;
 function turnOnCaps() {
@@ -277,7 +276,7 @@ function turnOnCaps() {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.code == 'CapsLock') {
+    if (event.code === 'CapsLock') {
       capsLogic();
     }
   });
@@ -286,7 +285,7 @@ turnOnCaps();
 
 function turnOnShift() {
   function behaviourDown() {
-    if (isCapsLocked == false) {
+    if (isCapsLocked === false) {
       caseToggle(CASE_UP);
     } else {
       caseToggle(SHIFT_CAPS);
@@ -294,7 +293,7 @@ function turnOnShift() {
   }
 
   function behaviourUp() {
-    if (isCapsLocked == false) {
+    if (isCapsLocked === false) {
       caseToggle(CASE_DOWN);
     } else {
       caseToggle(CAPS);
@@ -315,25 +314,25 @@ function turnOnShift() {
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.code == 'ShiftLeft') {
+    if (event.code === 'ShiftLeft') {
       behaviourDown();
       pushLogic(true, 42);
     }
   });
   document.addEventListener('keyup', (event) => {
-    if (event.code == 'ShiftLeft') {
+    if (event.code === 'ShiftLeft') {
       behaviourUp();
       pushLogic(false, 42);
     }
   });
   document.addEventListener('keydown', (event) => {
-    if (event.code == 'ShiftRight') {
+    if (event.code === 'ShiftRight') {
       behaviourDown();
       pushLogic(true, 54);
     }
   });
   document.addEventListener('keyup', (event) => {
-    if (event.code == 'ShiftRight') {
+    if (event.code === 'ShiftRight') {
       behaviourUp();
       pushLogic(false, 54);
     }
@@ -345,6 +344,7 @@ const EN_LANG = document.querySelectorAll('.eng');
 const RU_LANG = document.querySelectorAll('.rus');
 const LANG_KEY = 'lang';
 
+let currentLanguage = false;
 function langToggle(langName) {
   if (langName === 'en') {
     localStorage.setItem(LANG_KEY, 'en');
@@ -363,10 +363,11 @@ function langToggle(langName) {
     RU_LANG.forEach(element => {
       element.classList.remove('hidden');
       caseToggle(CASE_DOWN);
-      currentLanguage = true; // для исключения необходимости кликать на кнопку дважды, если пердыдущее состояние ru
+      currentLanguage = true; // чтобы не кликать на кнопку дважды, если пердыдущее состояние ru
     });
   }
-} // переключатель языка аналогичный переключателю кейсов, но с хранинием значения языка в localStorage
+} // переключатель языка аналогичный переключателю кейсов,
+// но с хранинием значения языка в localStorage
 
 document.addEventListener('DOMContentLoaded', () => {
   const savedLang = localStorage.getItem(LANG_KEY);
@@ -377,7 +378,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 }); // при загрузке страницы чекаем localStorage на язык
 
-let currentLanguage = false;
 function switchLang() {
   function langLogic() {
     if (!currentLanguage) {
@@ -409,7 +409,6 @@ function lightKeyboard() {
       }
     });
     document.addEventListener('keyup', event => {
-      console.log(key);
       if (event.code !== 'CapsLock' && event.code === key.classList[1]) {
         key.classList.remove('pushed');
       }
@@ -430,20 +429,21 @@ function typeKeyboard() {
                     || event.code.slice(0, 3) === 'Min'
                     || event.code.slice(0, 3) === 'Equ'
                     || event.code.slice(0, 3) === 'Bra'
-                    || event.code == 'Backquote'
-                    || event.code == 'Backslash'
-                    || event.code == 'Semicolon'
-                    || event.code == 'Quote'
-                    || event.code == 'Comma'
-                    || event.code == 'Period'
-                    || event.code == 'Slash') {
+                    || event.code === 'Backquote'
+                    || event.code === 'Backslash'
+                    || event.code === 'Semicolon'
+                    || event.code === 'Quote'
+                    || event.code === 'Comma'
+                    || event.code === 'Period'
+                    || event.code === 'Slash') {
           TEXTAREA.value += key.innerText;
         }
-        if (event.code == 'Delete') {
+        if (event.code === 'Delete') {
           let currentValue = TEXTAREA.value;
           let selectionStart = TEXTAREA.selectionStart;
           let selectionEnd = TEXTAREA.selectionEnd;
-          let newValue = currentValue.substring(0, selectionStart) + currentValue.substring(selectionEnd + 1);
+          let newValue = currentValue
+            .substring(0, selectionStart) + currentValue.substring(selectionEnd + 1);
           TEXTAREA.value = newValue;
           TEXTAREA.selectionStart = selectionStart;
           TEXTAREA.selectionEnd = selectionStart;
@@ -464,13 +464,13 @@ function typeKeyboard() {
           TEXTAREA.setSelectionRange(currentPos - 1, currentPos - 1);
           return false;
         }
-        if (event.code == 'Tab') {
+        if (event.code === 'Tab') {
           TEXTAREA.value += '    ';
         }
-        if (event.code == 'Enter') {
+        if (event.code === 'Enter') {
           TEXTAREA.value += '\n';
         }
-        if (event.code == 'Space') {
+        if (event.code === 'Space') {
           TEXTAREA.value += ' ';
         }
       }
@@ -489,20 +489,21 @@ function typeMouse() {
                 || keyCode.slice(0, 3) === 'Min'
                 || keyCode.slice(0, 3) === 'Equ'
                 || keyCode.slice(0, 3) === 'Bra'
-                || keyCode == 'Backquote'
-                || keyCode == 'Backslash'
-                || keyCode == 'Semicolon'
-                || keyCode == 'Quote'
-                || keyCode == 'Comma'
-                || keyCode == 'Period'
-                || keyCode == 'Slash') {
+                || keyCode === 'Backquote'
+                || keyCode === 'Backslash'
+                || keyCode === 'Semicolon'
+                || keyCode === 'Quote'
+                || keyCode === 'Comma'
+                || keyCode === 'Period'
+                || keyCode === 'Slash') {
         TEXTAREA.value += key.innerText;
       }
-      if (keyCode == 'Delete') {
+      if (keyCode === 'Delete') {
         let currentValue = TEXTAREA.value;
         let selectionStart = TEXTAREA.selectionStart;
         let selectionEnd = TEXTAREA.selectionEnd;
-        let newValue = currentValue.substring(0, selectionStart) + currentValue.substring(selectionEnd + 1);
+        let newValue = currentValue
+          .substring(0, selectionStart) + currentValue.substring(selectionEnd + 1);
         TEXTAREA.value = newValue;
         TEXTAREA.selectionStart = selectionStart;
         TEXTAREA.selectionEnd = selectionStart;
@@ -523,13 +524,13 @@ function typeMouse() {
         TEXTAREA.setSelectionRange(currentPos - 1, currentPos - 1);
         return false;
       }
-      if (keyCode == 'Tab') {
+      if (keyCode === 'Tab') {
         TEXTAREA.value += '    ';
       }
-      if (keyCode == 'Enter') {
+      if (keyCode === 'Enter') {
         TEXTAREA.value += '\n';
       }
-      if (keyCode == 'Space') {
+      if (keyCode === 'Space') {
         TEXTAREA.value += ' ';
       }
     });
@@ -548,7 +549,8 @@ function moveCursor() {
       // To start of last string
       let currentLineStart = this.value.lastIndexOf('\n', currentPos - 1) + 1;
       let prevLineStart = this.value.lastIndexOf('\n', currentLineStart - 2) + 1;
-      newPos = prevLineStart + Math.min(currentPos - currentLineStart, this.value.substr(prevLineStart).length);
+      newPos = prevLineStart + Math
+        .min(currentPos - currentLineStart, this.value.substr(prevLineStart).length);
     } else if (keyCode === 'ArrowRight') { // Right
       newPos = currentPos + 1;
     } else if (keyCode === 'ArrowDown') { // Down
@@ -558,7 +560,8 @@ function moveCursor() {
       if (nextLineStart === -1) {
         newPos = this.value.length;
       } else {
-        newPos = nextLineStart + Math.min(currentPos - currentLineStart, this.value.substr(nextLineStart).length);
+        newPos = nextLineStart + Math
+          .min(currentPos - currentLineStart, this.value.substr(nextLineStart).length);
       }
     }
     if (newPos !== null) {
@@ -585,7 +588,8 @@ function moveCursorByClick() {
         TEXTAREA.focus();
         let currentLineStart = TEXTAREA.value.lastIndexOf('\n', currentPos - 1) + 1;
         let prevLineStart = TEXTAREA.value.lastIndexOf('\n', currentLineStart - 2) + 1;
-        newPos = prevLineStart + Math.min(currentPos - currentLineStart, TEXTAREA.value.substr(prevLineStart).length);
+        newPos = prevLineStart + Math
+          .min(currentPos - currentLineStart, TEXTAREA.value.substr(prevLineStart).length);
       } else if (keyCode === 'ArrowRight') { // Right
         TEXTAREA.focus();
         newPos = currentPos + 1;
@@ -597,7 +601,8 @@ function moveCursorByClick() {
         if (nextLineStart === -1) {
           newPos = TEXTAREA.value.length;
         } else {
-          newPos = nextLineStart + Math.min(currentPos - currentLineStart, TEXTAREA.value.substr(nextLineStart).length);
+          newPos = nextLineStart + Math
+            .min(currentPos - currentLineStart, TEXTAREA.value.substr(nextLineStart).length);
         }
       }
       if (newPos !== null) {
