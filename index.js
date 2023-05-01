@@ -96,7 +96,7 @@ function drawHTML() {
   const SHIFT_INSERT = document.querySelector('.shiftkeys');
   const CTRL_INSERT = document.querySelector('.ctrlkeys');
 
-  for (let i = 0; i < Object.keys(numObj).length; i++) {
+  for (let i = 0; i < Object.keys(numObj).length; i += 1) {
     NUM_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(numObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${numObj[Object.keys(numObj)[i]][4]}</span>
@@ -113,7 +113,7 @@ function drawHTML() {
 </div>`;
   } // Num row
 
-  for (let i = 0; i < Object.keys(tabObj).length; i++) {
+  for (let i = 0; i < Object.keys(tabObj).length; i += 1) {
     TAB_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(tabObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${tabObj[Object.keys(tabObj)[i]][4]}</span>
@@ -130,7 +130,7 @@ function drawHTML() {
 </div>`;
   } // Tab row
 
-  for (let i = 0; i < Object.keys(capsObj).length; i++) {
+  for (let i = 0; i < Object.keys(capsObj).length; i += 1) {
     CAPS_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(capsObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${capsObj[Object.keys(capsObj)[i]][4]}</span>
@@ -147,7 +147,7 @@ function drawHTML() {
 </div>`;
   } // Caps row
 
-  for (let i = 0; i < Object.keys(shiftObj).length; i++) {
+  for (let i = 0; i < Object.keys(shiftObj).length; i += 1) {
     SHIFT_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(shiftObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${shiftObj[Object.keys(shiftObj)[i]][4]}</span>
@@ -164,7 +164,7 @@ function drawHTML() {
 </div>`;
   } // Shift row
 
-  for (let i = 0; i < Object.keys(ctrlObj).length; i++) {
+  for (let i = 0; i < Object.keys(ctrlObj).length; i += 1) {
     CTRL_INSERT.innerHTML += `<div class="keyboard-key ${Object.keys(ctrlObj)[i]}">
 <span class="rus hidden">
     <span class="caseDown hidden">${ctrlObj[Object.keys(ctrlObj)[i]][4]}</span>
@@ -392,7 +392,7 @@ function switchLang() {
     langLogic();
   });
 
-  document.addEventListener('keydown', function (event) {
+  document.addEventListener('keydown', event => {
     if (event.altKey && event.shiftKey) {
       langLogic();
     }
@@ -474,13 +474,14 @@ function typeKeyboard() {
           TEXTAREA.value += ' ';
         }
       }
+      return null;
     });
   });
 }
 typeKeyboard();
 
 function typeMouse() {
-  for (let i = 0; i < KEYBOARD.length; i++) {
+  for (let i = 0; i < KEYBOARD.length; i += 1) {
     KEYBOARD[i].addEventListener('mousedown', () => {
       let key = KEYBOARD[i];
       let keyCode = KEYBOARD[i].classList[1];
@@ -533,13 +534,14 @@ function typeMouse() {
       if (keyCode === 'Space') {
         TEXTAREA.value += ' ';
       }
+      return null;
     });
   }
 }
 typeMouse();
 
 function moveCursor() {
-  TEXTAREA.addEventListener('keydown', function (event) {
+  TEXTAREA.addEventListener('keydown', function move(event) {
     let keyCode = event.key;
     let currentPos = this.selectionStart;
     let newPos = null;
@@ -570,13 +572,14 @@ function moveCursor() {
       event.preventDefault();
       return false;
     }
+    return null;
   });
 }
 moveCursor();
 
 function moveCursorByClick() {
-  for (let i = 0; i < KEYBOARD.length; i++) {
-    KEYBOARD[i].addEventListener('mousedown', function (event) {
+  for (let i = 0; i < KEYBOARD.length; i += 1) {
+    KEYBOARD[i].addEventListener('mousedown', event => {
       let keyCode = KEYBOARD[i].classList[1];
       let currentPos = TEXTAREA.selectionStart;
       let newPos = null;
@@ -611,6 +614,7 @@ function moveCursorByClick() {
         event.preventDefault();
         return false;
       }
+      return null;
     });
   }
 }
