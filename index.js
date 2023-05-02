@@ -436,7 +436,10 @@ function typeKeyboard() {
                     || event.code === 'Comma'
                     || event.code === 'Period'
                     || event.code === 'Slash') {
-          TEXTAREA.value += key.innerText;
+          const currentPosition = TEXTAREA.selectionStart;
+          TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + key.innerText + TEXTAREA
+            .value.substring(TEXTAREA.selectionEnd);
+          TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
         }
         if (event.code === 'Delete') {
           let currentValue = TEXTAREA.value;
@@ -503,7 +506,10 @@ function typeMouse() {
                 || keyCode === 'Comma'
                 || keyCode === 'Period'
                 || keyCode === 'Slash') {
-        TEXTAREA.value += key.innerText;
+        const currentPosition = TEXTAREA.selectionStart;
+        TEXTAREA.value = TEXTAREA.value.substring(0, currentPosition) + key.innerText + TEXTAREA
+          .value.substring(TEXTAREA.selectionEnd);
+        TEXTAREA.setSelectionRange(currentPosition + 1, currentPosition + 1);
       }
       if (keyCode === 'Delete') {
         let currentValue = TEXTAREA.value;
